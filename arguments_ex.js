@@ -44,7 +44,7 @@ function sum() {
 Function.prototype.myBind = function (ctx, ...bindArgs) {
     let that = this;
     return function (...callArgs) { 
-        that.apply(ctx, bindArgs.concat(callArgs));
+        that.apply(ctx, callArgs.concat(bindArgs));
     };
 };
 
@@ -74,28 +74,28 @@ class Dog {
 const markov = new Cat("Markov");
 const pavlov = new Dog("Pavlov");
 
-// markov.says("meow", "Ned");
-// // Markov says meow to Ned!
-// // true
+markov.says("meow", "Ned");
+// Markov says meow to Ned!
+// true
 
-// // bind time args are "meow" and "Kush", no call time args
-// markov.says.myBind(pavlov, "meow", "Kush")(); 
-// // Pavlov says meow to Kush!
-// // true
+// bind time args are "meow" and "Kush", no call time args
+markov.says.myBind(pavlov, "meow", "Kush")(); 
+// Pavlov says meow to Kush!
+// true
 
-// // no bind time args (other than context), call time args are "meow" and "a tree"
-// markov.says.myBind(pavlov)("meow", "a tree");
-// // Pavlov says meow to a tree!
-// // true
+// no bind time args (other than context), call time args are "meow" and "a tree"
+markov.says.myBind(pavlov)("meow", "a tree");
+// Pavlov says meow to a tree!
+// true
 
-// // bind time arg is "meow", call time arg is "Markov"
-// markov.says.myBind(pavlov, "meow")("Markov");
-// // Pavlov says meow to Markov!
-// // true
+// bind time arg is "meow", call time arg is "Markov"
+markov.says.myBind(pavlov, "meow")("Markov");
+// Pavlov says meow to Markov!
+// true
 
-// // no bind time args (other than context), call time args are "meow" and "me"
-// const notMarkovSays = markov.says.myBind(pavlov);
-// notMarkovSays("meow", "me");
+// no bind time args (other than context), call time args are "meow" and "me"
+const notMarkovSays = markov.says.myBind(pavlov);
+notMarkovSays("meow", "me");
 // Pavlov says meow to me!
 // true
 
@@ -134,7 +134,7 @@ Function.prototype.curry = function(numArgs) {
         if (args.length < numArgs){
             return _curriedFunc;
         } else {
-            return that(...args);
+            return that.apply(that, args);
         }
     };
 };
@@ -143,5 +143,6 @@ printer = function (...args){
     args.forEach(ele => console.log(ele));
 };
 
-miniprinter = printer.curry(3);
+miniprinter = printer.curry(2);
 miniprinter("one")("two")("three");
+
