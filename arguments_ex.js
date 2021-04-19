@@ -19,8 +19,8 @@ function sum() {
     return total;
 }
 
-console.log(sum(1, 2, 3, 4) === 10);
-console.log(sum(1, 2, 3, 4, 5) === 15);
+// console.log(sum(1, 2, 3, 4) === 10);
+// console.log(sum(1, 2, 3, 4, 5) === 15);
 
 
 // bind with args
@@ -74,27 +74,74 @@ class Dog {
 const markov = new Cat("Markov");
 const pavlov = new Dog("Pavlov");
 
-markov.says("meow", "Ned");
-// Markov says meow to Ned!
-// true
+// markov.says("meow", "Ned");
+// // Markov says meow to Ned!
+// // true
 
-// bind time args are "meow" and "Kush", no call time args
-markov.says.myBind(pavlov, "meow", "Kush")(); 
-// Pavlov says meow to Kush!
-// true
+// // bind time args are "meow" and "Kush", no call time args
+// markov.says.myBind(pavlov, "meow", "Kush")(); 
+// // Pavlov says meow to Kush!
+// // true
 
-// no bind time args (other than context), call time args are "meow" and "a tree"
-markov.says.myBind(pavlov)("meow", "a tree");
-// Pavlov says meow to a tree!
-// true
+// // no bind time args (other than context), call time args are "meow" and "a tree"
+// markov.says.myBind(pavlov)("meow", "a tree");
+// // Pavlov says meow to a tree!
+// // true
 
-// bind time arg is "meow", call time arg is "Markov"
-markov.says.myBind(pavlov, "meow")("Markov");
-// Pavlov says meow to Markov!
-// true
+// // bind time arg is "meow", call time arg is "Markov"
+// markov.says.myBind(pavlov, "meow")("Markov");
+// // Pavlov says meow to Markov!
+// // true
 
-// no bind time args (other than context), call time args are "meow" and "me"
-const notMarkovSays = markov.says.myBind(pavlov);
-notMarkovSays("meow", "me");
+// // no bind time args (other than context), call time args are "meow" and "me"
+// const notMarkovSays = markov.says.myBind(pavlov);
+// notMarkovSays("meow", "me");
 // Pavlov says meow to me!
 // true
+
+
+// curriedSum
+
+
+function curriedSum(num) {
+
+    const numbers = [];
+    return function _curriedSum(num1) {
+        numbers.push(num1);
+        if (numbers.length === num){
+            let sum = numbers.reduce((a, b) => a + b);
+            return sum;
+        } else {
+            return _curriedSum;
+        }
+    };
+
+}
+
+
+// const sum1 = curriedSum(4);
+// console.log(sum1(5)(30)(20)(1)); // => 56
+
+
+
+
+Function.prototype.curry = function(numArgs) {
+
+    let args = [];
+    const that = this;
+    return function _curriedFunc(...callArgs) {
+        args = args.concat(callArgs);
+        if (args.length < numArgs){
+            return _curriedFunc;
+        } else {
+            return that(...args);
+        }
+    };
+};
+
+printer = function (...args){
+    args.forEach(ele => console.log(ele));
+};
+
+miniprinter = printer.curry(3);
+miniprinter("one")("two")("three");
