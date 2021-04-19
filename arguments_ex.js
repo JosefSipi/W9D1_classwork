@@ -25,14 +25,33 @@ console.log(sum(1, 2, 3, 4, 5) === 15);
 
 // bind with args
 
-Function.prototype.myBind = function (ctx) {
-    let bindArgs = Array.prototype.slice.call(arguments);
+// Function.prototype.myBind = function (ctx) {
+//     let bindArgs = [];
+//     for (i = 1; i<arguments.length; i++){
+//         bindArgs.push(arguments[i])
+//     } 
+//     //Array.prototype.slice.call(arguments);
+//     let that = this;
+//     return function() {
+//         let callArgs = [];
+//         for (i = 0; i < arguments.length; i++) {
+//             callArgs.push(arguments[i])
+//         }
+//         that.apply(ctx, bindArgs.concat(callArgs));
+//     };
+// };
+
+Function.prototype.myBind = function (ctx, ...bindArgs) {
     let that = this;
-    return function() {
-        let callArgs = Array.prototype.slice.call(arguments); //[...arguments]
-        that.apply(ctx, callArgs.concat(bindArgs));
+    return function (...callArgs) { 
+        that.apply(ctx, bindArgs.concat(callArgs));
     };
 };
+
+
+
+// new_function = oldFunction.myBind(context, 'apple')
+// new_function(arg1, arg2)
 
 
 class Cat {
@@ -60,7 +79,7 @@ markov.says("meow", "Ned");
 // true
 
 // bind time args are "meow" and "Kush", no call time args
-markov.says.myBind(pavlov, "meow", "Kush")();
+markov.says.myBind(pavlov, "meow", "Kush")(); 
 // Pavlov says meow to Kush!
 // true
 
